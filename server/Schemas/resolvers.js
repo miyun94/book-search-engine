@@ -42,11 +42,11 @@ const resolvers = {
             return { token, user }; 
         }, 
 
-        saveBook: async (parent, {bookData}, context) => {
-            if (context.user) {
-                const updatedUser = await User.findOneAndUpdate(
-                    { _id: context.user._id },
-                    { $push: { savedBooks: bookData } },
+        saveBook: async (parent, {input}, {user}) => {
+            if (user) {
+                const updatedUser = await User.findByIdAndUpdate(
+                    { _id: user._id },
+                    { $addToSet: { savedBooks: input } },
                     { new: true }
                 ); 
 
@@ -56,11 +56,11 @@ const resolvers = {
             throw new AuthenticationError('Please log in to see saved books'); 
         }, 
 
-        removeBook: async (parent, {bookId}, context) => {
-            if (context.user) {
+        removeBook: async (parent, {bookId}, {user}) => {
+            if (user) {
                 const updatedUser = await User.findOneAndUpdate(
-                    { _id: context.user._id },
-                    { $pull: { savedBooks: { bookId } } },
+                    { _id: user._id },
+                    { $pull: { savedBooks: { bookId: bookId } } },
                     { new: true }
                 ); 
 

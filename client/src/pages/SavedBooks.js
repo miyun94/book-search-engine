@@ -56,7 +56,10 @@ const SavedBooks = () => {
 
     try {
       // eslint-disable-next-line
-      const {data} = await removeBook({ variables: bookId})
+     
+    const {data} = await removeBook({ variables: {bookId}, })
+
+    console.log(data); 
       // const response = await deleteBook(bookId, token);
 
       // if (!response.ok) {
